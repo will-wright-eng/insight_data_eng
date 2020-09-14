@@ -1,0 +1,9 @@
+*.py[cod]
+src/Untitled*
+*.ipynb_checkpoints
+__pycache__/
+
+*.xlsx
+
+src/config*
+.DS_Store
