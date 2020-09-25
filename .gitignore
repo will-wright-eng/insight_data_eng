@@ -1,9 +1,11 @@
 *.py[cod]
 src/Untitled*
 *.ipynb_checkpoints
+*.ipynb
 __pycache__/
 
 *.xlsx
+*.gz
 
 src/config*
 .DS_Store
