@@ -9,3 +9,5 @@ __pycache__/
 
 src/config*
 .DS_Store
+
+notes.txt
