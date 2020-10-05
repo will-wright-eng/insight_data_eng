@@ -8,8 +8,7 @@ __pycache__/
 *.gz
 
 src/config*
-archive
-project_dev
+project_dev/
 .DS_Store
 
 notes.*
