@@ -32,6 +32,6 @@ The CommonCrawl corpus is composed of a monthly crawl of the internet, aggregati
 
 ## Setup
 - run `create_emr_cluster.sh` locally
-- adjust `~/.ssh/config` file such that `emr_cluster` reflects the new _Master public DNS_
+- adjust `~/.ssh/config` file such that `emr_cluster` reflects the new _Master public DNS_ (automate this with env vars)
 - scp four files to cluster with `spc_files.sh` (`sparkcc.py`  `warc.paths.2020.1.100.gz` `word_count.py` `spark-job.sh`)
 - run `spark-job.sh` on cluster
