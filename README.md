@@ -18,7 +18,7 @@ The Common Crawl corpus is composed of a monthly crawl of the internet, aggregat
 ![tech_stack](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_data_eng_tech_stack.png)  
 
 ### User Interface
-![user_interface](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/blarg.png)  
+![user_interface](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/user_interface.png)  
 
 ## Project links
 - [Common Crawl](https://registry.opendata.aws/commoncrawl/)
