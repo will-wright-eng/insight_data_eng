@@ -1,14 +1,21 @@
 *.py[cod]
-src/Untitled*
-*.ipynb_checkpoints
-*.ipynb
-__pycache__/
-
 *.xlsx
 *.gz
 
-src/config*
-project_dev/
+*.ipynb_checkpoints
+*.ipynb
+__pycache__/
 .DS_Store
 
-notes.*
+Untitled*
+config*
+tmp*
+notes*
+
+create_emr_cluster.sh
+scp_files.sh
+wet_paths_100series.csv
+
+project_dev/
+
+
