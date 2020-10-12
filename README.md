@@ -21,9 +21,9 @@ The Common Crawl corpus is composed of a monthly crawl of the internet, aggregat
 ![user_interface](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/user_interface.png)  
 
 ## Project links
-- [Common Crawl](https://registry.opendata.aws/commoncrawl/)
-- [Slides link](https://docs.google.com/presentation/d/1Snfb07JO33BxOD7dne0vgiSb7Koa0BrrAwoh-_eo1_U/edit?usp=sharing)
+- [Slide deck](https://docs.google.com/presentation/d/1Snfb07JO33BxOD7dne0vgiSb7Koa0BrrAwoh-_eo1_U/edit?usp=sharing)
 - [Tableau dashboard](https://public.tableau.com/profile/will.wright6939#!/vizhome/brand_visability_within_web_corpus/BrandVisabilitywithinWebCorpus?publish=yes)
+- [Common Crawl](https://registry.opendata.aws/commoncrawl/)
 
 ## Setup
 - randomly sample `wet.path.gz` files and generate `.csv`

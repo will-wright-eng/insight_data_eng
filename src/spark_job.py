@@ -1,6 +1,5 @@
 '''
-spark job test
-single path hardcoded
+spark job to be run via spark_job.sh bash script
 
 Author: William Wright
 '''
@@ -20,6 +19,7 @@ from pyspark.sql.types import StructType, StructField, StringType, LongType
 import config
 
 def pathlist_from_csv(filename):
+    '''docstring for pathlist_from_csv'''
     with open(filename, 'r') as read_obj:
         csv_reader = reader(read_obj)
         list_of_rows = list(csv_reader)
@@ -27,10 +27,12 @@ def pathlist_from_csv(filename):
     return pathlist
 
 def s3_key_filename_dict(paths):
+    '''docstring for s3_key_filename_dict'''
     return {path:path.split('wet/')[-1] for path in paths}
 
 
-def download_wet_from_s3(_key,_temp,s3client):#,filename):
+def download_wet_from_s3(_key,_temp,s3client):
+    '''docstring for download_wet_from_s3'''
     print('downloading...')
     bucket = 'commoncrawl'
     try:
@@ -41,6 +43,7 @@ def download_wet_from_s3(_key,_temp,s3client):#,filename):
     return print('download complete')
 
 def extract_lines_from_wet(_temp):
+    '''docstring for extract_lines_from_wet'''
     warc_dates = []
     text_stream = []
     #with open(wet_file, 'rb') as stream:
@@ -54,6 +57,7 @@ def extract_lines_from_wet(_temp):
     return warc_dates, text_stream
     
 def analyze_contents(contents):
+    '''docstring for analyze_contents'''
     _dates = contents[0]
     text_stream = contents[1]
     min_date = min(_dates)
@@ -67,11 +71,10 @@ def analyze_contents(contents):
 
 
 def process_files(iterator):
-    # S3 client (not thread-safe, initialize outside parallelized loop)
+    '''docstring for process_files
+    S3 client (not thread-safe, initialize outside parallelized loop)'''
     no_sign_request = botocore.client.Config(signature_version=botocore.UNSIGNED)
     s3client = boto3.client('s3', config=no_sign_request)
-    
-    #_data = []
     for _key in iterator:
         _temp = NamedTemporaryFile(mode='w+b',dir='tmp/')
         download_wet_from_s3(_key,_temp,s3client)
@@ -81,13 +84,13 @@ def process_files(iterator):
         _date = results[0]['min_date']
         for entity in list(results[1]):
             yield (_key,_date,entity,results[1][entity])
-            # _data.append((_key,_date,entity,results[1][entity]))
-    #yield _data
 
 def run():
     '''docstring for run'''
     spark = SparkSession.builder.appName('spark-cc-analysis').getOrCreate()
-    sc = spark.sparkContext
+    conf = SparkConf()
+    conf.set("spark.default.parallelism", 100)
+    sc = spark.sparkContext(conf=conf)
 
     filename = config.input_file
     pathlist = pathlist_from_csv(filename)
@@ -98,9 +101,8 @@ def run():
     columns = ['file_name','timestamp','entity','entity_count']
     df = spark.createDataFrame(results,columns)
     df.show()
-    #output = 's3://process-tables-for-aurora/results/test_results.parquet'
     output = config.output
-    df.write.parquet(output)
+    df.write.mode('overwrite').parquet(output)
 
 if __name__ == '__main__':
     run()
