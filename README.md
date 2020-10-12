@@ -4,6 +4,7 @@
 1. Project Summary
 2. Project Links
 3. Setup
+4. Data
 
 ## Project Summary
 ### Instroduction
@@ -33,3 +34,9 @@ The Common Crawl corpus is composed of a monthly crawl of the internet, aggregat
 - ssh into master node
 - `chmod +x spark_job.sh`
 - `./spark_job.sh`
+
+## Data
+- sampled 1.5 GBs of data from each month
+- date range: April 2014 - Sept 2020
+- 69 path files (historical data isn't exactly by month)
+- `2020-10-12_wet_paths_10series.csv` is 102.79 GBs of data by avg estimation
