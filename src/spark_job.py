@@ -72,7 +72,8 @@ def analyze_contents(contents):
 
 def process_files(iterator):
     '''docstring for process_files
-    S3 client (not thread-safe, initialize outside parallelized loop)'''
+    S3 client not thread-safe, initialize outside parallelized loop
+    '''
     no_sign_request = botocore.client.Config(signature_version=botocore.UNSIGNED)
     s3client = boto3.client('s3', config=no_sign_request)
     for _key in iterator:
@@ -87,19 +88,21 @@ def process_files(iterator):
 
 def run():
     '''docstring for run'''
-    spark = SparkSession.builder.appName('spark-cc-analysis').getOrCreate()
-    conf = SparkConf()
-    conf.set("spark.default.parallelism", 100)
-    sc = spark.sparkContext(conf=conf)
+    conf = SparkConf() \
+        .set("spark.default.parallelism", 690)
+    sc = SparkContext(
+        appName='spark-cc-analysis',
+        conf=conf)
+    sqlc = SQLContext(sparkContext=sc)
 
     filename = config.input_file
     pathlist = pathlist_from_csv(filename)
 
     rdd = sc.parallelize(pathlist)
-    results = rdd.mapPartitions(process_files, preservesPartitioning=False).collect()
+    results = rdd.mapPartitions(process_files).collect()
 
     columns = ['file_name','timestamp','entity','entity_count']
-    df = spark.createDataFrame(results,columns)
+    df = sqlc.createDataFrame(results,columns)
     df.show()
     output = config.output
     df.write.mode('overwrite').parquet(output)
