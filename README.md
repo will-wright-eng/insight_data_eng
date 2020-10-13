@@ -19,7 +19,7 @@ The Common Crawl corpus is composed of a monthly crawl of the internet, aggregat
 ![tech_stack](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_data_eng_tech_stack.png)  
 
 ### User Interface
-![user_interface](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/user_interface.png)  
+![user_interface](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/brand_visability_within_web_corpus.png)  
 
 ## Project links
 - [Slide deck](https://docs.google.com/presentation/d/1Snfb07JO33BxOD7dne0vgiSb7Koa0BrrAwoh-_eo1_U/edit?usp=sharing)
@@ -36,7 +36,6 @@ The Common Crawl corpus is composed of a monthly crawl of the internet, aggregat
 - `./spark_job.sh`
 
 ## Data
-- sampled 1.5 GBs of data from each month
 - date range: April 2014 - Sept 2020
 - 69 path files (historical data isn't exactly by month)
-- `2020-10-12_wet_paths_10series.csv` is 102.79 GBs of data by avg estimation
+- `2020-10-12_wet_paths_10series.csv` contains paths for 102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
