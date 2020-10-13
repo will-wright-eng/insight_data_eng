@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rm -r __pycache__
+rm -r tmp
+
 start=`date +%s`
 mkdir tmp
 
