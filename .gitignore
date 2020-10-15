@@ -8,13 +8,13 @@ __pycache__/
 .DS_Store
 
 Untitled*
-config*
 tmp*
 notes*
 
+config.py
 create_emr_cluster.sh
 scp_files.sh
-wet_paths_100series.csv
+2020-10-12_wet_paths_10series.csv
 
 project_dev/
 

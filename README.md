@@ -5,6 +5,7 @@
 2. Project Links
 3. Setup
 4. Data
+5. Future Work
 
 ## Project Summary
 ### Instroduction
@@ -27,6 +28,7 @@ The Common Crawl corpus is composed of a wide monthly crawl of the internet, agg
 - [Common Crawl](https://registry.opendata.aws/commoncrawl/)
 
 ## Setup
+_examples present where credentials or addresses needed_
 - randomly sample `wet.path.gz` files and generate `.csv`
 - run `create_emr_cluster.sh`
 - adjust `~/.ssh/config` and `spc_files.sh` such that they reflect the new __Master public DNS__ 
@@ -44,7 +46,6 @@ The Common Crawl corpus is composed of a wide monthly crawl of the internet, agg
 ### Need
 - add elements to spark process for increased depth of anaysis in dashboard
 - add badge/shield from [shield.io](https://shields.io/category/platform-support)
-- add 
 
 ### Want
 - bash script of environmental vars w/ AWS CLI call for master DNS
