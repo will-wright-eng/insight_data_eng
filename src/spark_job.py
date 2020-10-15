@@ -83,19 +83,20 @@ def process_files(iterator):
 
 def run():
     '''docstring for run'''
+    n = 690
     conf = SparkConf() \
-        .set("spark.default.parallelism", 100) \
-        .set("spark.driver.maxResultSize", "2g")
+        .set("spark.default.parallelism", n) #\
+        # .set("spark.driver.maxResultSize", "2g")
     sc = SparkContext(
         appName='spark-cc-analysis',
         conf=conf)
     sqlc = SQLContext(sparkContext=sc)
 
     filename = config.input_file
-    pathlist = pathlist_from_csv(filename)[:100]
+    pathlist = pathlist_from_csv(filename)[:n]
 
     rdd = sc.parallelize(pathlist)
-    results = rdd.mapPartitions(process_files).collect()
+    results = rdd.mapPartitions(process_files)
     cols = ['target_uri','timestamp','content_length','entity','entity_count','entity_total']
     df = sqlc.createDataFrame(results,cols)
     df.show()
