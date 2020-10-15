@@ -8,9 +8,9 @@
 
 ## Project Summary
 ### Instroduction
-Shifting the consumer's eye via digital advertising has become a 400 billion dollar industry. Brands and consultancies use rapid monitoring tools in order to quickly respond to the public's response to advertising along with various other market events. The aim of my project was to take a zoomed out view on brand visability in order to understand alternative methods of measuring marketing spend.
+Shifting the consumer's eye via digital advertising has become a 400 billion dollar industry. Brands and consultancies use rapid monitoring tools in order to quickly respond to the public's response to advertising along with various other market events. The aim of my project was to take a zoomed-out view on brand visability by unlocking potential within alternative data sources.
 
-The Common Crawl corpus is composed of a monthly crawl of the internet, aggregating teabytes of web data. By analyzing each page through a batch process I determined entity visability of companies accross websites found within the corpus.
+The Common Crawl corpus is composed of a wide monthly crawl of the internet, aggregating teabytes of web data. By analyzing each page through a batch process I determined entity visability of companies accross websites found within the corpus.
 
 ### Process flow
 ![process_flow](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_project_proposal.png)
@@ -39,3 +39,17 @@ The Common Crawl corpus is composed of a monthly crawl of the internet, aggregat
 - date range: April 2014 - Sept 2020
 - 69 path files (historical data isn't exactly by month)
 - `2020-10-12_wet_paths_10series.csv` contains paths for 102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
+
+## Future work
+### Need
+- add elements to spark process for increased depth of anaysis in dashboard
+- add badge/shield from [shield.io](https://shields.io/category/platform-support)
+- add 
+
+### Want
+- bash script of environmental vars w/ AWS CLI call for master DNS
+- add log file to spark app w/ process time | input | output etc.
+- create framework for non-overlaping repeat analysis (add record of analyzed files to S3)
+
+### Nice to have
+- AWS CLI script for creating VPC and subnets

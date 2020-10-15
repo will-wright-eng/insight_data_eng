@@ -6,6 +6,8 @@ Author: William Wright
 
 from tempfile import NamedTemporaryFile
 from csv import reader
+from collections import Counter
+import string
 
 import boto3
 import botocore
@@ -42,34 +44,6 @@ def download_wet_from_s3(_key,_temp,s3client):
     _temp.seek(0)
     return print('download complete')
 
-def extract_lines_from_wet(_temp):
-    '''docstring for extract_lines_from_wet'''
-    warc_dates = []
-    text_stream = []
-    #with open(wet_file, 'rb') as stream:
-    with open(_temp.name, 'rb') as stream:
-        for record in ArchiveIterator(stream):
-            if record.rec_type == 'warcinfo':
-                warc_dates.append(record.rec_headers.get_header('WARC-Date'))
-            if record.rec_type == 'conversion':
-                text = record.content_stream().read()
-                text_stream.append(text.decode('utf-8'))
-    return warc_dates, text_stream
-    
-def analyze_contents(contents):
-    '''docstring for analyze_contents'''
-    _dates = contents[0]
-    text_stream = contents[1]
-    min_date = min(_dates)
-    max_date = max(_dates)
-    date_dict = {'min_date':min_date,'max_date':max_date}
-    # FAANG
-    brands = ['facebook', 'apple', 'amazon', 'netflix', 'google']
-    brand_count = [sum([1 if brand in i.lower() else 0 for i in text_stream]) for brand in brands]
-    brand_dict = {i:j for i,j in zip(brands,brand_count)}
-    return date_dict, brand_dict
-
-
 def process_files(iterator):
     '''docstring for process_files
     S3 client not thread-safe, initialize outside parallelized loop
@@ -78,31 +52,52 @@ def process_files(iterator):
     s3client = boto3.client('s3', config=no_sign_request)
     for _key in iterator:
         _temp = NamedTemporaryFile(mode='w+b',dir='tmp/')
-        download_wet_from_s3(_key,_temp,s3client)
-        contents = extract_lines_from_wet(_temp)
-        _temp.close()
-        results = analyze_contents(contents)
-        _date = results[0]['min_date']
-        for entity in list(results[1]):
-            yield (_key,_date,entity,results[1][entity])
+        try:
+            download_wet_from_s3(_key,_temp,s3client)
+            brands = ['facebook', 'apple', 'amazon', 'netflix', 'google']
+            with open(_temp.name, 'rb') as stream:
+                for record in ArchiveIterator(stream):
+                    print(record.rec_type)
+                    if record.rec_type == 'conversion':
+                        text = record.content_stream().read()
+                        text = text.decode('utf-8').lower().translate(str.maketrans('', '', string.punctuation))
+                        brand_count = [sum([1 if brand in text else 0]) for brand in brands]
+                        lines = text.split('\n')
+                        words = [i.split(' ') for i in lines]
+                        words = [item for sublist in words for item in sublist]
+                        c = Counter(words)
+                        brand_nums = [c[brand] for brand in brands]
+                        # results [[wet file data], [brand simple count], [brand total count]]
+                        results = [[record.rec_headers.get_header('WARC-Target-URI')
+                                    , record.rec_headers.get_header('WARC-Date')
+                                    , record.rec_headers.get_header('Content-Length')]
+                                   , brand_count
+                                   , brand_nums]
+                        for i in range(len(brands)):
+                            # cols = ['target_uri','timestamp','content_length','entity','entity_count','entity_total']
+                            yield tuple(results[0]+[brands[i]]+[results[1][i]]+[results[2][i]])
+        except ArchiveLoadFailed as e:
+            print(e)
+        finally:
+            _temp.close()
 
 def run():
     '''docstring for run'''
     conf = SparkConf() \
-        .set("spark.default.parallelism", 690)
+        .set("spark.default.parallelism", 100) \
+        .set("spark.driver.maxResultSize", "2g")
     sc = SparkContext(
         appName='spark-cc-analysis',
         conf=conf)
     sqlc = SQLContext(sparkContext=sc)
 
     filename = config.input_file
-    pathlist = pathlist_from_csv(filename)
+    pathlist = pathlist_from_csv(filename)[:100]
 
     rdd = sc.parallelize(pathlist)
     results = rdd.mapPartitions(process_files).collect()
-
-    columns = ['file_name','timestamp','entity','entity_count']
-    df = sqlc.createDataFrame(results,columns)
+    cols = ['target_uri','timestamp','content_length','entity','entity_count','entity_total']
+    df = sqlc.createDataFrame(results,cols)
     df.show()
     output = config.output
     df.write.mode('overwrite').parquet(output)

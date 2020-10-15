@@ -9,6 +9,7 @@ mkdir tmp
 spark-submit \
 --packages org.apache.hadoop:hadoop-aws:3.2.0 \
 --verbose \
+--conf spark.shuffle.consolidateFiles=true \
 spark_job.py
 
 end=`date +%s`
