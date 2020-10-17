@@ -14,7 +14,7 @@ Shifting the consumer's eye via digital advertising has become a 400 billion dol
 The Common Crawl corpus is composed of a wide monthly crawl of the internet, aggregating teabytes of web data. By analyzing each page through a batch process I determined entity visability of companies accross websites found within the corpus.
 
 ### Process flow
-![process_flow](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_project_proposal.png)
+![process_flow](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_project_processflow.png)
 
 ### Tech Stack
 ![tech_stack](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_data_eng_tech_stack.png)  
@@ -41,6 +41,7 @@ _examples present where credentials or addresses needed_
 - date range: April 2014 - Sept 2020
 - 69 path files (historical data isn't exactly by month)
 - `2020-10-12_wet_paths_10series.csv` contains paths for 102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
+- results produced table with 167,335,570 rows (2.7 GB parquet / 21.4 GB csv)
 
 ## Future work
 ### Need
