@@ -1,29 +1,38 @@
-import random
-import os
-import csv
-import pandas as pd
-import gzip
-import datetime as dt
-import boto3
-import logging
+'''
+preprocessing wet path files
+saves csv lists and config file locally and in S3
+csv list is input to spark app
 
-log_level = 'INFO'
-_name = 'spark-cc-analysis'
+Author: William Wright
+'''
+
+import os
+import gzip
+import random
+import logging
+import datetime as dt
+
+import pandas as pd
+import boto3
+
+
+LOG_LEVEL = 'INFO'
 LOGGING_FORMAT = '%(asctime)s %(levelname)s %(name)s: %(message)s'
-logging.basicConfig(level=log_level, format=LOGGING_FORMAT)
+logging.basicConfig(level=LOG_LEVEL, format=LOGGING_FORMAT)
 
 
 def save_config(today, new_dir, filename_inputcsv, bucket,
                 filename_outputparquet):
+    '''save_config docstring'''
     lines = [
         "'''\n", "config file for anything that shouldn't be on github\n",
         "'''\n", "input_file = '" + today + "_" + filename_inputcsv + "'\n",
         "output_file = 's3://" + bucket + "/results/" + new_dir + "/" +
         filename_outputparquet + "'\n"
     ]
-    with open('new_config.py', 'w') as f:
+    with open('new_config.py', 'w') as file:
         for line in lines:
-            f.write(line)
+            file.write(line)
 
 
 def save_projectfiles_tos3(new_dir, cwd, bucket):
@@ -36,7 +45,7 @@ def save_projectfiles_tos3(new_dir, cwd, bucket):
         files = os.listdir()
         for file in files:
             _key = 'results/' + new_dir + '/' + file
-            logging.info('upload to S3: ' + _key)
+            logging.info('upload to S3: %s', _key)
             s3 = boto3.resource('s3')
             s3.meta.client.upload_file(Filename=file, Bucket=bucket, Key=_key)
     finally:
@@ -44,16 +53,14 @@ def save_projectfiles_tos3(new_dir, cwd, bucket):
 
 
 def extract_wet_paths(wet_filename):
-    with gzip.GzipFile(wet_filename, mode='r') as f:
-        paths = [x.decode('utf8').strip() for x in f.readlines()]
+    '''extract_wet_paths docstring'''
+    with gzip.GzipFile(wet_filename, mode='r') as file:
+        paths = [x.decode('utf8').strip() for x in file.readlines()]
     return paths
 
 
-def files_in_dir():
-    return [i for i in os.listdir() if 'wet.path' in i]
-
-
 def gen_rand_seq(paths, n):
+    '''gen_rand_seq docstring'''
     rand_sequence = [random.randint(0, len(paths) - 1) for i in range(n)]
     if len(set(rand_sequence)) == n:
         return rand_sequence
@@ -62,6 +69,7 @@ def gen_rand_seq(paths, n):
 
 
 def process_files(files, n):
+    '''process_files docstring'''
     temp = []
     dir_stats = []
     for wet_filename in files:
@@ -82,14 +90,16 @@ def process_files(files, n):
     return df, df_stats
 
 
-def mknewdir(new_dir):
+def mk_newdir(new_dir):
+    '''mk_newdir docstring'''
     if new_dir in os.listdir():
-        return mknewdir(new_dir + '_dup')
+        return mk_newdir(new_dir + '_dup')
     else:
         return new_dir
 
 
 def main():
+    '''main docstring'''
     today = str(dt.datetime.today()).split(' ')[0]
     cwd = os.getcwd()
     n = 10
@@ -97,7 +107,7 @@ def main():
     # create list of wet files
     try:
         os.chdir('wet_path_files')
-        files = files_in_dir()
+        files = [i for i in os.listdir() if 'wet.path' in i]
         filename = today + '_wet_paths_10series.csv'
         df, df_stats = process_files(files, n)
     finally:
@@ -106,12 +116,12 @@ def main():
     # save csvs and config to project sub directory
     bucket = 'will-cc-bucket'
     new_dir = today + '_cc_process_subdir'
-    new_dir = mknewdir(new_dir)
+    new_dir = mk_newdir(new_dir)
 
     try:
         os.mkdir(new_dir)
         os.chdir(new_dir)
-        logging.info('dataframe length: ' + str(len(df)))
+        logging.info('dataframe length: %s', str(len(df)))
 
         df.to_csv(filename, index=False, header=False)
         df_stats.to_csv(filename.replace('.csv', '_stats.csv'), index=False)
@@ -121,12 +131,11 @@ def main():
         save_config(today, new_dir, filename_inputcsv, bucket,
                     filename_outputparquet)
     finally:
-        logging.info('files in ' + new_dir + ': ' + str(os.listdir()))
+        logging.info('files in {}: {}'.format(new_dir, str(os.listdir())))
         os.chdir(cwd)
 
     save_projectfiles_tos3(new_dir, cwd, bucket)
     logging.info('files saved to sub directory and uploaded to S3')
-    return
 
 
 if __name__ == '__main__':
