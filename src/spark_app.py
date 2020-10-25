@@ -13,22 +13,20 @@ import boto3
 import botocore
 from warcio.archiveiterator import ArchiveIterator
 
-import pyspark
 from pyspark import SparkContext, SparkConf
-from pyspark.sql import SQLContext, SparkSession
-from pyspark.sql.types import StructType, StructField, StringType, LongType
+from pyspark.sql import SQLContext
 
 import config
 
-log_level = 'INFO'
-_name = 'spark-cc-analysis'
+LOG_LEVEL = 'INFO'
+NAME = 'spark-cc-analysis'
 LOGGING_FORMAT = '%(asctime)s %(levelname)s %(name)s: %(message)s'
-logging.basicConfig(level=log_level, format=LOGGING_FORMAT)
+logging.basicConfig(level=LOG_LEVEL, format=LOGGING_FORMAT)
 
 
 def get_logger():
     '''docstring for get_logger'''
-    return logging.getLogger(self.name)
+    return logging.getLogger(NAME)
 
 
 def pathlist_from_csv(filename):
@@ -55,7 +53,6 @@ def download_wet_from_s3(_key, _temp, s3client):
         get_logger().error(e)
     _temp.seek(0)
     get_logger().info('download complete')
-    return
 
 
 def process_files(iterator):
@@ -91,7 +88,6 @@ def process_files(iterator):
                             record.rec_headers.get_header('Content-Length')
                         ], brand_count, brand_nums]
                         for i in range(len(brands)):
-                            # cols ['target_uri','timestamp','content_length','entity','entity_count','entity_total']
                             yield tuple(results[0] + [brands[i]] +
                                         [results[1][i]] + [results[2][i]])
         except ArchiveLoadFailed as e:
@@ -107,7 +103,7 @@ def run():
     conf = SparkConf() \
         .set("spark.default.parallelism", n)
 
-    sc = SparkContext(appName=_name, conf=conf)
+    sc = SparkContext(appName=NAME, conf=conf)
 
     sqlc = SQLContext(sparkContext=sc)
 
