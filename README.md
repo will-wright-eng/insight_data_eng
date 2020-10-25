@@ -5,7 +5,7 @@
 2. [Links](README.md#links)
 3. [Setup](README.md#setup)
 4. [Data](README.md#data)
-5. [Next](README.md#next)
+5. [Future Work](README.md#future-work)
 
 ## Summary
 ### Instroduction
@@ -43,15 +43,16 @@ _examples present where credentials or addresses needed_
 - `2020-10-12_wet_paths_10series.csv` contains paths for 102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
 - results produced table with 167,335,570 rows (2.7 GB parquet / 21.4 GB csv)
 
-## Next
+## Future Work
 ### Need
 - add elements to spark process for increased depth of anaysis in dashboard
-- add badge/shield from [shield.io](https://shields.io/category/platform-support)
+- segment out records by target url and it's persistence between months
 
 ### Want
 - bash script of environmental vars w/ AWS CLI call for master DNS
 - add log file to spark app w/ process time | input | output etc.
 - create framework for non-overlaping repeat analysis (add record of analyzed files to S3)
+- add badge/shield from [shield.io](https://shields.io/category/platform-support)
 
 ### Nice to have
 - AWS CLI script for creating VPC and subnets
