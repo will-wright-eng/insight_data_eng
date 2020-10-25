@@ -15,7 +15,6 @@ config.py
 create_emr_cluster.sh
 scp_files.sh
 2020-10-12_wet_paths_10series.csv
+2020-*
 
 project_dev/
-
-
