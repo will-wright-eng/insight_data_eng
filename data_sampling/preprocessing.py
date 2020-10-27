@@ -15,6 +15,8 @@ import datetime as dt
 import pandas as pd
 import boto3
 
+import config_preprocess
+
 
 LOG_LEVEL = 'INFO'
 LOGGING_FORMAT = '%(asctime)s %(levelname)s %(name)s: %(message)s'
@@ -90,10 +92,10 @@ def process_files(files, n):
     return df, df_stats
 
 
-def mk_newdir(new_dir):
-    '''mk_newdir docstring'''
+def check_newdir(new_dir):
+    '''check_newdir docstring'''
     if new_dir in os.listdir():
-        return mk_newdir(new_dir + '_dup')
+        return check_newdir(new_dir + '_dup')
     else:
         return new_dir
 
@@ -101,6 +103,7 @@ def mk_newdir(new_dir):
 def main():
     '''main docstring'''
     today = str(dt.datetime.today()).split(' ')[0]
+    filename = today + '_'+config_preprocess.wet_path_series+'.csv'
     cwd = os.getcwd()
     n = 10
 
@@ -108,15 +111,14 @@ def main():
     try:
         os.chdir('wet_path_files')
         files = [i for i in os.listdir() if 'wet.path' in i]
-        filename = today + '_wet_paths_10series.csv'
         df, df_stats = process_files(files, n)
     finally:
         os.chdir(cwd)
 
     # save csvs and config to project sub directory
-    bucket = 'will-cc-bucket'
+    bucket = config_preprocess.bucket
     new_dir = today + '_cc_process_subdir'
-    new_dir = mk_newdir(new_dir)
+    new_dir = check_newdir(new_dir)
 
     try:
         os.mkdir(new_dir)
@@ -126,14 +128,15 @@ def main():
         df.to_csv(filename, index=False, header=False)
         df_stats.to_csv(filename.replace('.csv', '_stats.csv'), index=False)
 
-        filename_inputcsv = "wet_paths_10series.csv"
-        filename_outputparquet = "results_newprocess_690paths.parquet"
+        filename_inputcsv = filename
+        filename_outputparquet = filename.replace('.csv','_results.parquet')
         save_config(today, new_dir, filename_inputcsv, bucket,
                     filename_outputparquet)
     finally:
         logging.info('files in {}: {}'.format(new_dir, str(os.listdir())))
         os.chdir(cwd)
 
+    # save all project files to S3
     save_projectfiles_tos3(new_dir, cwd, bucket)
     logging.info('files saved to sub directory and uploaded to S3')
 
