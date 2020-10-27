@@ -12,6 +12,7 @@ tmp*
 notes*
 
 config.py
+config_preprocess.py
 create_emr_cluster.sh
 scp_files.sh
 2020-10-12_wet_paths_10series.csv

@@ -1,4 +1,5 @@
-# Brand Visability within Web Corpus
+# BrandView 
+### Brand Visability within a Web Crawl Corpus
 
 ## Table of Contents
 1. [Summary](README.md#summary)
@@ -45,8 +46,9 @@ _examples present where credentials or addresses needed_
 
 ## Future Work
 ### Need
-- add elements to spark process for increased depth of anaysis in dashboard
+- ~add elements to spark process for increased depth of anaysis in dashboard~
 - segment out records by target url and it's persistence between months
+- create OOP-class structure that abstracts WET file _access and download_ from the _analysis_ of the text
 
 ### Want
 - bash script of environmental vars w/ AWS CLI call for master DNS
