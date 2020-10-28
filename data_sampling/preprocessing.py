@@ -129,7 +129,7 @@ def main():
         df_stats.to_csv(filename.replace('.csv', '_stats.csv'), index=False)
 
         filename_inputcsv = filename
-        filename_outputparquet = filename.replace('.csv','_results.parquet')
+        filename_outputparquet = filename.replace('.csv', '_results.parquet')
         save_config(today, new_dir, filename_inputcsv, bucket,
                     filename_outputparquet)
     finally:
