@@ -30,19 +30,19 @@ The Common Crawl corpus is composed of a wide monthly crawl of the internet, agg
 
 ## Setup
 _examples present where credentials or addresses needed_
-- randomly sample `wet.path.gz` files and generate `.csv`
-- run `create_emr_cluster.sh`
-- adjust `~/.ssh/config` and `spc_files.sh` such that they reflect the new __Master public DNS__ 
-- scp files to cluster with `spc_files.sh`
-- ssh into master node
-- `chmod +x spark_job.sh`
-- `./spark_job.sh`
+1. run `preprocessing.py` to randomly sample `wet.path.gz` files and generate project files
+2. run `create_emr_cluster.sh`
+3. adjust `~/.ssh/config` and `spc_files.sh` such that they reflect your cluster's __Master public DNS__ 
+4. scp files to cluster with `spc_files.sh` (or change `config.py` file to pull files from S3)
+5. ssh into master node
+6. `chmod +x spark_job.sh`
+7. `./spark_job.sh`
 
 ## Data
-- date range: April 2014 - Sept 2020
-- 69 path files (historical data isn't exactly by month)
-- `2020-10-12_wet_paths_10series.csv` contains paths for 102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
-- results produced table with 167,335,570 rows (2.7 GB parquet / 21.4 GB csv)
+- date range: 	April 2014 - Sept 2020
+- source files: 69 path files (historical data isn't exactly by month)
+- analyzed: 	102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
+- results: 		167,335,570 rows (2.7 GB parquet / 21.4 GB csv)
 
 ## Future Work
 ### Need
