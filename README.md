@@ -1,10 +1,10 @@
-# BrandView 
+# __BrandView__ 
 ### Brand Visability within a Web Crawl Corpus
 
 ## Table of Contents
 1. [Summary](README.md#summary)
-2. [Links](README.md#links)
-3. [Setup](README.md#setup)
+2. [Setup](README.md#setup)
+3. [Links](README.md#links)
 4. [Data](README.md#data)
 5. [Future Work](README.md#future-work)
 
@@ -12,21 +12,10 @@
 ### Instroduction
 Shifting the consumer's eye via digital advertising has become a 400 billion dollar industry. Brands and consultancies use rapid monitoring tools in order to quickly respond to the public's response to advertising along with various other market events. The aim of my project was to take a zoomed-out view on brand visability by unlocking potential within alternative data sources.
 
-The Common Crawl corpus is composed of a wide monthly crawl of the internet, aggregating teabytes of web data. By analyzing each page through a batch process I determined entity visability of companies accross websites found within the corpus.
+The Common Crawl corpus is composed of a monthly wide crawl of the internet, aggregating teabytes of web data. By analyzing a random sampling of pages through a batch process I determined entity visability of companies accross websites found within the corpus.
 
 ### Process flow
-![process_flow](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_project_processflow.png)
-
-### Tech Stack
-![tech_stack](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/insight_dataeng_techstack.png)  
-
-### User Interface
-![user_interface](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/brand_visability_within_web_corpus.png)  
-
-## Links
-- [Slide deck](https://docs.google.com/presentation/d/1Snfb07JO33BxOD7dne0vgiSb7Koa0BrrAwoh-_eo1_U/edit?usp=sharing)
-- [Tableau dashboard](https://public.tableau.com/profile/will.wright6939#!/vizhome/brand_visability_within_web_corpus/BrandVisabilitywithinWebCorpus?publish=yes)
-- [Common Crawl](https://registry.opendata.aws/commoncrawl/)
+![process_flow](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/new_process_flow.png)
 
 ## Setup
 _examples present where credentials or addresses needed_
@@ -38,23 +27,33 @@ _examples present where credentials or addresses needed_
 6. `chmod +x spark_job.sh`
 7. `./spark_job.sh`
 
+## Links
+- [Slide deck](https://docs.google.com/presentation/d/1Snfb07JO33BxOD7dne0vgiSb7Koa0BrrAwoh-_eo1_U/edit?usp=sharing)
+- [Tableau dashboard](https://public.tableau.com/profile/will.wright6939#!/vizhome/brand_visability_within_web_corpus/BrandVisabilitywithinWebCorpus?publish=yes)
+- [Common Crawl](https://registry.opendata.aws/commoncrawl/)
+
 ## Data
-- date range: 	April 2014 - Sept 2020
-- source files: 69 path files (historical data isn't exactly by month)
-- analyzed: 	102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
-- results: 		167,335,570 rows (2.7 GB parquet / 21.4 GB csv)
+- __date range:__ April 2014 - Sept 2020
+- __source files:__ 69 path files (historical data isn't exactly by month)
+- __analyzed:__ 102.79 GBs of data by avg estimation (sampled 1.5 GBs of data from each path file)
+- __results:__ 167,335,570 rows (2.7 GB parquet / 21.4 GB csv)
+
+### ERD
+![process_flow](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/results_erd.png)
+
+### User Interface
+![user_interface](https://github.com/william-cass-wright/insight_data_eng/blob/master/images/brand_visability_within_web_corpus.png)  
 
 ## Future Work
 ### Need
-- ~add elements to spark process for increased depth of anaysis in dashboard~
+- ~add elements to spark process to increase depth of anaysis~
 - segment out records by target url and it's persistence between months
 - create OOP-class structure that abstracts WET file _access and download_ from the _analysis_ of the text
 
 ### Want
-- bash script of environmental vars w/ AWS CLI call for master DNS
-- add log file to spark app w/ process time | input | output etc.
-- create framework for non-overlaping repeat analysis (add record of analyzed files to S3)
-- add badge/shield from [shield.io](https://shields.io/category/platform-support)
+- AWS CLI call for master DNS and cluster ID
+- add runtime log file to spark app w/ project, process time, input_file, output_file, and file_count
 
 ### Nice to have
 - AWS CLI script for creating VPC and subnets
+- add badge/shield from [shield.io](https://shields.io/category/platform-support)
