@@ -24,15 +24,15 @@ logging.basicConfig(level=LOG_LEVEL, format=LOGGING_FORMAT)
 
 
 def save_config(today, new_dir, filename_inputcsv, bucket,
-                filename_outputparquet):
+                filename_outputparquet, n):
     '''save_config docstring'''
     lines = [
         "'''\n", "config file for anything that shouldn't be on github\n",
         "'''\n", "input_file = '" + today + "_" + filename_inputcsv + "'\n",
         "output_file = 's3://" + bucket + "/results/" + new_dir + "/" +
-        filename_outputparquet + "'\n"
+        filename_outputparquet + "'\n" + "file_n = " + str(n)
     ]
-    with open('new_config.py', 'w') as file:
+    with open('config.py', 'w') as file:
         for line in lines:
             file.write(line)
 
@@ -103,9 +103,9 @@ def check_newdir(new_dir):
 def main():
     '''main docstring'''
     today = str(dt.datetime.today()).split(' ')[0]
-    filename = today + '_'+config_preprocess.wet_path_series+'.csv'
+    filename = config_preprocess.wet_path_series+'.csv'
     cwd = os.getcwd()
-    n = 10
+    n = 5
 
     # create list of wet files
     try:
@@ -131,7 +131,7 @@ def main():
         filename_inputcsv = filename
         filename_outputparquet = filename.replace('.csv', '_results.parquet')
         save_config(today, new_dir, filename_inputcsv, bucket,
-                    filename_outputparquet)
+                    filename_outputparquet, n)
     finally:
         logging.info('files in {}: {}'.format(new_dir, str(os.listdir())))
         os.chdir(cwd)
