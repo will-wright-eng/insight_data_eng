@@ -1,6 +1,7 @@
 *.py[cod]
 *.xlsx
 *.gz
+*.csv
 
 *.ipynb_checkpoints
 *.ipynb

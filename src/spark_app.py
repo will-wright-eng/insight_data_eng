@@ -8,6 +8,7 @@ from tempfile import NamedTemporaryFile
 from csv import reader
 from collections import Counter
 import string
+import logging
 
 import boto3
 import botocore
@@ -98,8 +99,9 @@ def process_files(iterator):
 
 def run():
     '''docstring for run
-    for testing set 'n' to 69'''
-    n = 69
+    set 'n' to length of key list
+    n = 69 * (number of files sampled)'''
+    n = 345
     conf = SparkConf() \
         .set("spark.default.parallelism", n)
 
@@ -118,7 +120,7 @@ def run():
     ]
     df = sqlc.createDataFrame(results, cols)
     df.show()
-    output = config.output
+    output = config.output_file
     df.write.mode('overwrite').parquet(output)
 
 
