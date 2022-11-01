@@ -9,7 +9,7 @@
 5. [Future Work](README.md#future-work)
 
 ## Summary
-### Instroduction
+### Introduction
 Shifting the consumer's eye via digital advertising has become a 400 billion dollar industry. Brands and consultancies use rapid monitoring tools in order to quickly respond to the public's response to advertising along with various other market events. The aim of my project was to take a zoomed-out view on brand visability by unlocking potential within alternative data sources.
 
 The Common Crawl corpus is composed of a monthly wide crawl of the internet, aggregating teabytes of web data. By analyzing a random sampling of pages through a batch process I determined entity visability of companies accross websites found within the corpus.
